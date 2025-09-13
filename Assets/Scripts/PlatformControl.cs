@@ -1,5 +1,7 @@
 using UnityEngine;
 
+
+
 public class PlatformControl : MonoBehaviour
 {
     [SerializeField] private float speed = 20f;
@@ -10,3 +12,5 @@ public class PlatformControl : MonoBehaviour
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, -1.82f, 1.82f), transform.position.y, transform.position.z);
     }
 }
+
+
