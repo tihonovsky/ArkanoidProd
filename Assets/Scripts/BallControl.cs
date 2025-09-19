@@ -1,43 +1,69 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
+
 
 public class BallControl : MonoBehaviour
 {
-    [SerializeField] private Rigidbody2D rigitBody;
+    [SerializeField] private PlatformControl _platformControl;
+    [SerializeField] public Rigidbody2D _rigitBody;
     [SerializeField] private Text _block;
-    [SerializeField] private GameObject LoseMenu;
-    [SerializeField] private GameObject WinMenu;
-    private int _blockCounter;
+    [SerializeField] private GameObject _loseMenu;
+    [SerializeField] private GameObject _victoryMenu; 
     
-    void Start()
+    public float BallSpeed;
+    
+    private int _blockCounter;
+    private bool _isActiveBall;
+    
+    private void Start()
     {
-        rigitBody.linearVelocity = new Vector2(3,3);
+        _rigitBody = GetComponent<Rigidbody2D>();
+        _rigitBody.bodyType = RigidbodyType2D.Kinematic;
     }
 
-    public void OnCollisionEnter2D(Collision2D col)
+    private void Update()
     {
-        if (col.gameObject.CompareTag("Block")) 
+        if (_platformControl.transform.position.x != 0 && !_isActiveBall)
         {
-           Destroy(col.gameObject);
+            BallActivate();
+        }
+    }
+
+    private void BallActivate()
+    {
+        _isActiveBall = true;
+        _rigitBody.bodyType = RigidbodyType2D.Dynamic;
+        _rigitBody.linearVelocity = new Vector2(0,BallSpeed);
+    }
+    
+
+    public void OnCollisionEnter2D(Collision2D coll)
+    {
+        if (coll.gameObject.CompareTag("Block")) 
+        {
+           Destroy(coll.gameObject);
            
            _blockCounter++;
            
            _block.text = _blockCounter.ToString();
         }
 
-        if (col.gameObject.CompareTag("LoseBorder"))
+        if (coll.gameObject.CompareTag("LoseBorder"))
         {
-            LoseMenu.SetActive(true);
+            _loseMenu.SetActive(true);
             
             Time.timeScale = 0f;
+            
+            _platformControl.Stick.gameObject.SetActive(false);
         }
 
-        if (_blockCounter == 1)
+        if (_blockCounter == 21)
         {
-            WinMenu.SetActive(true);
+            _victoryMenu.SetActive(true);
             
             Time.timeScale = 0f;
+            
+            _platformControl.Stick.gameObject.SetActive(false);
         }
     }
    
