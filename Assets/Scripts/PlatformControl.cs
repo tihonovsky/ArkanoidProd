@@ -5,29 +5,34 @@ using UnityEngine;
 public class PlatformControl : MonoBehaviour
 {
     [SerializeField] private float _speed = 8f;
+    [SerializeField] private BallControl _ballControl;
     
-    public Joystick Stick;
+    public JoystickForMovement Joystick;
     public BallControl Ball;
-    
+
     private float _inputX;
     private Rigidbody _rb;
 
     private void Start()
     {
-        Stick.gameObject.SetActive(true);
         _rb = GetComponent<Rigidbody>();
     }
-    
+
     private void Update()
     {
-        _inputX = Stick.Horizontal;
-        
+        if (Joystick.ReturnVectorDirection().x != 0 && !Ball.IsActiveBall)
+        {
+            _ballControl.BallActivate();
+        }
+
+        _inputX = Joystick.ReturnVectorDirection().x;
+
         transform.Translate(_inputX * _speed * Time.deltaTime, 0, 0);
 
-        transform.position = new Vector3(Mathf.Clamp(transform.position.x, -1.82f, 1.82f), transform.position.y,
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x, -2.06f, 2.06f), transform.position.y,
             transform.position.z);
     }
-    
+
     private void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.tag == "Ball")
@@ -39,7 +44,7 @@ public class PlatformControl : MonoBehaviour
             var rb = col.transform.GameObject().GetComponent<Rigidbody2D>();
             var currentAngle = Vector2.SignedAngle(Vector2.up, rb.linearVelocity);
             var bounceAngle = (offset / width) * 30;
-            var newAngle = Mathf.Clamp(currentAngle + bounceAngle, -30,30);
+            var newAngle = Mathf.Clamp(currentAngle + bounceAngle, -30, 30);
             var rotation = Quaternion.AngleAxis(newAngle, Vector3.forward);
             rb.linearVelocity = rotation * Vector2.up * rb.linearVelocity.magnitude;
         }

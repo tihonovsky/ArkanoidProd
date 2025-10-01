@@ -9,6 +9,7 @@ TagManager:
   - Platform
   - LevelBorder
   - Ball
+  - Block2
   layers:
   - Default
   - TransparentFX
@@ -43,11 +44,27 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: LoseWindow
+    uniqueID: 947103339
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: LoseMenu
-    uniqueID: 2291989355
+  - name: 
+    uniqueID: 1963831151
+    locked: 0
+  - name: New Layer 3
+    uniqueID: 3244618867
+    locked: 0
+  - name: New Layer 4
+    uniqueID: 4018058637
+    locked: 0
+  - name: New Layer 5
+    uniqueID: 746810769
+    locked: 0
+  - name: UI
+    uniqueID: 3611574485
     locked: 0
   m_RenderingLayers:
   - Default
+  - Layer 1

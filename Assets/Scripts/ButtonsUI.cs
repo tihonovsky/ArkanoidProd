@@ -4,31 +4,33 @@ using UnityEngine.SceneManagement;
 public class ButtonsUI : MonoBehaviour
 {
     [SerializeField] private PlatformControl _platformControl;
-    
-    public GameObject PauseMenu;
+    [SerializeField] private GameObject _startWindow;
+    [SerializeField] private GameObject _loseWindow;
+    [SerializeField] private GameObject _victoryWindow;
+    [SerializeField] private GameObject _pauseWindow;
     
     private bool _pauseGame;
     
     public void Pause()
     {
-        PauseMenu.SetActive(true);
+        _pauseWindow.SetActive(true);
         
         _pauseGame = true;
         
         Time.timeScale = 0f;
         
-        _platformControl.Stick.gameObject.SetActive(false);
+        _platformControl.Joystick.gameObject.SetActive(false);
     }
 
     public void Resume()
     {
-        PauseMenu.SetActive(false);
+        _pauseWindow.SetActive(false);
         
         Time.timeScale = 1f;
         
         _pauseGame = false;
         
-        _platformControl.Stick.gameObject.SetActive(true);
+        _platformControl.Joystick.gameObject.SetActive(true);
     }
     public void RestartGame()
     {
@@ -38,14 +40,21 @@ public class ButtonsUI : MonoBehaviour
         
         Time.timeScale = 1f;
     }
-    public void LoadMainMenu()
+
+    public void LoadStartWindow()
     {
         Time.timeScale = 1f;
         
-        SceneManager.LoadScene("MainManu");
-        
-        _platformControl.Stick.gameObject.SetActive(false);
+        SceneManager.LoadScene("StartWindow");
     }
+    
+    
+
+   
+
+   
+    
+   
     
     
 }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 
@@ -7,63 +8,66 @@ public class BallControl : MonoBehaviour
     [SerializeField] private PlatformControl _platformControl;
     [SerializeField] public Rigidbody2D _rigitBody;
     [SerializeField] private Text _block;
-    [SerializeField] private GameObject _loseMenu;
-    [SerializeField] private GameObject _victoryMenu; 
+    [SerializeField] private GameObject _loseWindow;
+    [SerializeField] private GameObject _victoryWindow;
+    [SerializeField] private Sprite _damageSprite;
+    
+    
     
     public float BallSpeed;
+    public bool IsActiveBall;
     
     private int _blockCounter;
-    private bool _isActiveBall;
     
     private void Start()
     {
+        
         _rigitBody = GetComponent<Rigidbody2D>();
         _rigitBody.bodyType = RigidbodyType2D.Kinematic;
     }
-
-    private void Update()
+    
+    public void BallActivate()
     {
-        if (_platformControl.transform.position.x != 0 && !_isActiveBall)
-        {
-            BallActivate();
-        }
-    }
-
-    private void BallActivate()
-    {
-        _isActiveBall = true;
+        IsActiveBall = true;
         _rigitBody.bodyType = RigidbodyType2D.Dynamic;
         _rigitBody.linearVelocity = new Vector2(0,BallSpeed);
     }
     
-
     public void OnCollisionEnter2D(Collision2D coll)
     {
+        Image img = coll.gameObject.GetComponent<Image>();
         if (coll.gameObject.CompareTag("Block")) 
         {
-           Destroy(coll.gameObject);
+            Destroy(coll.gameObject);
            
-           _blockCounter++;
+            _blockCounter++;
            
-           _block.text = _blockCounter.ToString();
+            _block.text = _blockCounter.ToString();
+            
+        }
+
+        if (coll.gameObject.CompareTag("Block2"))
+        {
+            coll.gameObject.tag = "Block";
+            img.sprite = _damageSprite;
         }
 
         if (coll.gameObject.CompareTag("LoseBorder"))
         {
-            _loseMenu.SetActive(true);
+            _loseWindow.SetActive(true);
             
             Time.timeScale = 0f;
             
-            _platformControl.Stick.gameObject.SetActive(false);
+            _platformControl.Joystick.gameObject.SetActive(false);
         }
 
-        if (_blockCounter == 21)
+        if (_blockCounter == 13)
         {
-            _victoryMenu.SetActive(true);
+            _victoryWindow.SetActive(true);
             
             Time.timeScale = 0f;
             
-            _platformControl.Stick.gameObject.SetActive(false);
+            _platformControl.Joystick.gameObject.SetActive(false);
         }
     }
    
